@@ -1,0 +1,9 @@
+version: "3"
+services:
+  ignite:
+    image: "apacheignite/ignite:2.0.0"
+    environment:
+      CONFIG_URI: file:/config/ignite-config.xml
+    volumes:
+    - ./config:/config:ro
+    restart: unless-stopped
