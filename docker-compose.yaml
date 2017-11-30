@@ -1,9 +1,18 @@
 version: "3"
 services:
   ignite:
-    image: "apacheignite/ignite:2.0.0"
+    image: "apacheignite/ignite:2.2.0"
     environment:
       CONFIG_URI: file:/config/ignite-config.xml
+      IGNITE_QUIET: "false"
+      OPTION_LIBS: ignite-rest-http,ignite-cassandra-store,ignite-cassandra-serializers,ignite-kubernetes
+      JVM_OPTS: "-server -Xms1g  -Xmx1g -XX:NewSize=512m -XX:SurvivorRatio=6 -XX:+AlwaysPreTouch
+              -XX:+UseG1GC -XX:MaxGCPauseMillis=2000 -XX:GCTimeRatio=4 -XX:InitiatingHeapOccupancyPercent=30
+              -XX:G1HeapRegionSize=8M -XX:ConcGCThreads=2 -XX:G1HeapWastePercent=10 -XX:+UseTLAB
+              -XX:+ScavengeBeforeFullGC -XX:+DisableExplicitGC"
     volumes:
     - ./config:/config:ro
+    ports:
+     - "11211:11211"
+     - "47500-47509:47500-47509"
     restart: unless-stopped
