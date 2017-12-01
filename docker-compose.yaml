@@ -12,6 +12,7 @@ services:
               -XX:+ScavengeBeforeFullGC -XX:+DisableExplicitGC"
     volumes:
     - ./config:/config:ro
+    network_mode: host
     ports:
      - "11211:11211"
      - "47500-47509:47500-47509"
