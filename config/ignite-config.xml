@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util.xsd">
+
+<bean id="ignite.cfg"
+    class="org.apache.ignite.configuration.IgniteConfiguration">
+
+   <!--Caches for models-->
+    <property name="cacheConfiguration">
+      <list>
+        <!-- Cache-->
+        <bean class="org.apache.ignite.configuration.CacheConfiguration">
+          <property name="name" value="TEST_CACHE"/>
+          <property name="cacheMode" value="PARTITIONED"/>
+          <property name="storeKeepBinary" value="true"/>
+          <property name="queryEntities">
+            <list>
+              <bean class="org.apache.ignite.cache.QueryEntity">
+                <property name="keyType" value="java.lang.String"/>
+                <property name="valueType" value="id"/>
+                <property name="fields">
+                  <map>
+                    <entry key="uid" value="java.lang.String"/>
+                    <entry key="veon_id" value="java.lang.String"/>
+                  </map>
+                </property>
+                <property name="indexes">
+                  <list>
+                    <bean class="org.apache.ignite.cache.QueryIndex">
+                      <constructor-arg value="uid"/>
+                    </bean>
+                    <bean class="org.apache.ignite.cache.QueryIndex">
+                      <constructor-arg value="app_id"/>
+                    </bean>
+                  </list>
+                </property>
+              </bean>
+            </list>
+          </property>
+          <property name="indexedTypes">
+            <list>
+              <value>java.lang.String</value>
+              <value>org.apache.ignite.binary.BinaryObject</value>
+            </list>
+          </property>
+        </bean>
+      </list>
+    </property>
+
+    <property name="discoverySpi">
+        <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
+        		<property name="ipFinder">
+            		<bean
+class="org.apache.ignite.spi.discovery.tcp.ipfinder.kubernetes.TcpDiscoveryKubernetesIpFinder">
+            		</bean>
+            </property>
+        </bean>
+    </property>
+</bean>
+</beans>
